@@ -3,11 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createUser, updateUser } from "@/lib/actions/user.actions";
+import { register } from "@/lib/actions/auth.actions";
+import { registerFormSchema } from "@/lib/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
+import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -15,17 +17,8 @@ const RegisterForm = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const formSchema = z.object({
-    profilePhoto: z.string().min(2).max(50),
-    email: z.string().email().min(2).max(50),
-    password: z.string().min(2).max(50),
-    firstName: z.string().min(2).max(50),
-    lastName: z.string().min(2).max(50),
-    cpf: z.string().min(2).max(50),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registerFormSchema>>({
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       profilePhoto: "",
       email: "",
@@ -38,27 +31,18 @@ const RegisterForm = () => {
 
   console.log(JSON.stringify(form.getValues()));
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    alert(JSON.stringify(values));
+  const [state, formAction] = useFormState(register, null);
 
-    await createUser(
-      {
-        profilePhoto: values.profilePhoto,
-        email: values.email,
-        password: values.password,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        cpf: values.cpf,
-        role: "admin"
-      },
-      pathname
-    );
-  };
+  useEffect(() => {
+    if (state?.data === true) {
+      router.push("/feed");
+    }
+  }, [state]);
 
   return (
     <div className="flex justify-center items-center w-full">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-center items-center gap-2 w-full">
+        <form action={formAction} className="flex flex-col justify-center items-center gap-2 w-full">
           <FormField
             control={form.control}
             name="profilePhoto"
@@ -141,6 +125,7 @@ const RegisterForm = () => {
           <Button disabled={!form.formState.isValid} type="submit" className="mt-2 w-full">
             Registrar
           </Button>
+          <span>{JSON.stringify(state)}</span>
         </form>
       </Form>
     </div>

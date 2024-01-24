@@ -3,16 +3,19 @@
 import { cookies } from "next/headers";
 import { authentication, random } from "../utils";
 import { verifyUserEmail } from "./user.actions";
-import { loginFormSchema } from "../schemas/loginForm";
+import { loginFormSchema, registerFormSchema } from "../schemas/auth";
+import { connectToDB } from "../mongoose";
+import { UserModel } from "../models/user.model";
 
 export const login = async (state: any, formData: FormData) => {
-  "use server";
+  connectToDB();
+
   const result = loginFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   });
 
-  await new Promise(resolve => setTimeout(resolve,2000))
+  //   await new Promise((resolve) => setTimeout(resolve, 2000));
 
   if (result.success) {
     let { email, password } = result.data;
@@ -43,6 +46,46 @@ export const login = async (state: any, formData: FormData) => {
     });
 
     return { data: true };
+  }
+
+  if (result.error) {
+    return { error: result.error.format() };
+  }
+};
+
+export const register = async (state: any, formData: FormData) => {
+  connectToDB();
+
+  const result = registerFormSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+    lastName: formData.get("lastName"),
+    firstName: formData.get("firstName"),
+    cpf: formData.get("cpf"),
+    profilePhoto: formData.get("profilePhoto"),
+    role: formData.get("role") ?? "tutor",
+  });
+
+  if (result.success) {
+    let { email, password, lastName, firstName, cpf, profilePhoto, role } = result.data;
+
+    const salt = random();
+    const user = await new UserModel({
+      email: email.toLowerCase(),
+      firstName: firstName,
+      lastName: lastName,
+      cpf: cpf,
+      profilePhoto: profilePhoto,
+      role: role,
+      authentication: {
+        salt,
+        password: authentication(salt, password),
+      },
+    })
+      .save()
+      .then((user: any) => user.toObject());
+
+    return { data: user._id };
   }
 
   if (result.error) {
