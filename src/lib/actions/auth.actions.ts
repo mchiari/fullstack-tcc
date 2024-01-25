@@ -2,10 +2,10 @@
 
 import { cookies } from "next/headers";
 import { authentication, random } from "../utils";
-import { verifyUserEmail } from "./user.actions";
 import { loginFormSchema, registerFormSchema } from "../schemas/auth";
 import { connectToDB } from "../mongoose";
 import { UserModel } from "../models/user.model";
+import { getUserByEmailWithAuth } from "./user.actions";
 
 export const login = async (state: any, formData: FormData) => {
   connectToDB();
@@ -20,7 +20,7 @@ export const login = async (state: any, formData: FormData) => {
   if (result.success) {
     let { email, password } = result.data;
 
-    const user = await verifyUserEmail(String(email));
+    const user = await getUserByEmailWithAuth(String(email));
     if (!user) {
       return { error: "Wrong email" };
     }
@@ -38,7 +38,8 @@ export const login = async (state: any, formData: FormData) => {
 
     cookies().set({
       name: "sessionToken",
-      value: user.authentication!.sessionToken,
+      // value: `${user.authentication!.sessionToken}:${btoa(email)}`,
+      value: `${user.authentication!.sessionToken}`,
       domain: "localhost",
       path: "/",
       httpOnly: true,
@@ -91,4 +92,9 @@ export const register = async (state: any, formData: FormData) => {
   if (result.error) {
     return { error: result.error.format() };
   }
+};
+
+export const isAuthenticated = async (fullToken: string) => {
+  
+
 };

@@ -1,4 +1,3 @@
-import AccountProfile from "@/app/components/custom/AccountProfile";
 import RegisterForm from "@/app/components/custom/RegisterForm";
 import React, { Suspense } from "react";
 

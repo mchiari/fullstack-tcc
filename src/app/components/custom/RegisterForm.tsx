@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { register } from "@/lib/actions/auth.actions";
 import { registerFormSchema } from "@/lib/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useFormState } from "react-dom";

@@ -4,8 +4,6 @@ import { revalidatePath } from "next/cache";
 import { UserDocument, UserInterface, UserModel } from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import mongoose from "mongoose";
-import { ZodNull } from "zod";
-import { authentication, random } from "../utils";
 
 export const updateUser = async (
   { _id, email, firstName, lastName, cpf, role = "tutor", profilePhoto }: UserInterface,
@@ -14,6 +12,7 @@ export const updateUser = async (
   connectToDB();
 
   try {
+
     await UserModel.findOneAndUpdate(
       { _id: _id ? _id : undefined },
       {
@@ -38,11 +37,23 @@ export const updateUser = async (
   }
 };
 
-export const verifyUserEmail = async (email: string): mongoose.Query<UserDocument, any> => {
+export const getUserByEmailWithAuth= async (email: string): mongoose.Query<UserDocument, any> => {
   connectToDB();
 
   try {
     const user = UserModel.findOne({ email: email }).select("+authentication.salt +authentication.password");
+
+    return user;
+  } catch (error: any) {
+    throw new Error(`Failed to find user by email: ${error.message}`);
+  }
+};
+
+export const getUserBySessionToken = async (sessionToken: string): mongoose.Query<UserDocument, any> => {
+  connectToDB();
+
+  try {
+    const user = UserModel.findOne({ "authentication.sessionToken": sessionToken });
 
     return user;
   } catch (error: any) {
