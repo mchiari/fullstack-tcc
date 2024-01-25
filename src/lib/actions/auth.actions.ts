@@ -93,8 +93,3 @@ export const register = async (state: any, formData: FormData) => {
     return { error: result.error.format() };
   }
 };
-
-export const isAuthenticated = async (fullToken: string) => {
-  
-
-};

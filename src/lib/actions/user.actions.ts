@@ -49,14 +49,14 @@ export const getUserByEmailWithAuth= async (email: string): mongoose.Query<UserD
   }
 };
 
-export const getUserBySessionToken = async (sessionToken: string): mongoose.Query<UserDocument, any> => {
-  connectToDB();
+// export const getUserBySessionToken = async (sessionToken: string): mongoose.Query<UserDocument, any> => {
+//   connectToDB();
 
-  try {
-    const user = UserModel.findOne({ "authentication.sessionToken": sessionToken });
+//   try {
+//     const user = UserModel.findOne({ "authentication.sessionToken": sessionToken });
 
-    return user;
-  } catch (error: any) {
-    throw new Error(`Failed to find user by email: ${error.message}`);
-  }
-};
+//     return user;
+//   } catch (error: any) {
+//     throw new Error(`Failed to find user by email: ${error.message}`);
+//   }
+// };
