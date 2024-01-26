@@ -1,26 +1,35 @@
 import { NextResponse } from "next/server";
 import type { NextFetchEvent, NextRequest } from "next/server";
+import { verifyAuth } from "./lib/utils";
 
-export const middleware = async (request: NextRequest, event: NextFetchEvent) => {
-  if (request.nextUrl.pathname.startsWith("/login") || request.nextUrl.pathname.startsWith("/register")) {
+export const middleware = async (req: NextRequest, e: NextFetchEvent) => {
+  if (req.nextUrl.pathname.startsWith("/login") || req.nextUrl.pathname.startsWith("/register")) {
     return NextResponse.next();
   }
-  
+
   //handling css and assets
-  if (request.nextUrl.pathname.startsWith("/_next")) {
+  if (req.nextUrl.pathname.startsWith("/_next")) {
     return NextResponse.next();
   }
 
-  let cookie = request.cookies.get("sessionToken")?.value;
-  //   console.log(cookie)
+  let token = req.cookies.get("sessionToken")?.value;
 
-  if (!cookie) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
+  const verifiedToken =
+    token &&
+    (await verifyAuth(token).catch((error) => {
+      req.cookies.delete("sessionToken")
+      return false
+    }));
+
+  if (!verifiedToken) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 
   //TODO: HANDLE MIDDLEWARE AUTH
-
 
   return NextResponse.next();
 };

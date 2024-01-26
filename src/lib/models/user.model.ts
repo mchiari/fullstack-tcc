@@ -17,7 +17,7 @@ export interface UserInterface {
 const userSchema = new mongoose.Schema<UserInterface>({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true },
   role: {type: String, required: true},
   profilePhoto: {type: String},
   cpf: { type: String, required: true, length: 11 },

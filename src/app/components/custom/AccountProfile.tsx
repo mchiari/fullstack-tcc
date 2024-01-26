@@ -5,63 +5,47 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { updateUser } from "@/lib/actions/user.actions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { usePathname, useRouter } from "next/navigation";
+import { userFormSchema } from "@/lib/schemas/user";
+import { UserDocument } from "@/lib/models/user.model";
+import { useFormState } from "react-dom";
 
-const AccountProfile = (user: any, id?: string) => {
+const AccountProfile = (user: { user: UserDocument }) => {
+  const userData = user.user;
   const pathname = usePathname();
   const router = useRouter();
 
-  const formSchema = z.object({
-    profilePhoto: z.string().min(2).max(50),
-    email: z.string().email().min(2).max(50),
-    firstName: z.string().min(2).max(50),
-    lastName: z.string().min(2).max(50),
-    cpf: z.string().min(2).max(50),
-  });
+  // console.log(userData);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<Omit<z.infer<typeof userFormSchema> & { _id: string }, "password">>({
+    resolver: zodResolver(userFormSchema),
     defaultValues: {
-      profilePhoto: user.profilePhoto,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      cpf: user.cpf,
+      _id: userData._id,
+      profilePhoto: userData.profilePhoto,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      cpf: userData.cpf,
+      // password: "",
+      role: userData.role
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    alert(values);
-
-    await updateUser(
-      {
-        _id: user.id,
-        profilePhoto: values.profilePhoto,
-        email: values.email,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        cpf: values.cpf,
-      },
-      pathname
-    );
-  };
+  const [state, formAction] = useFormState(updateUser, null);
 
   return (
     <div className="flex justify-center items-center w-full">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col justify-center items-center gap-2 w-full">
+        <form action={formAction} className="flex flex-col justify-center items-center gap-2 w-full">
           <FormField
             control={form.control}
             name="profilePhoto"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  <Image src={user.profilePhoto} alt="profile photo" />
-                </FormLabel>
+                <FormLabel>profilePhoto</FormLabel>
                 <FormControl>
                   <Input placeholder="profilePhoto" {...field} />
                 </FormControl>
@@ -122,7 +106,33 @@ const AccountProfile = (user: any, id?: string) => {
             )}
           />
 
-          <Button disabled={!form.formState.isValid} type="submit" className="mt-2 w-full">
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input type="hidden" placeholder="role" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input type="hidden" placeholder="_id" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button disabled={false} type="submit" className="mt-2 w-full">
             Atualizar
           </Button>
         </form>

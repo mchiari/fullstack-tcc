@@ -42,12 +42,12 @@ const RegisterForm = () => {
     <div className="flex justify-center items-center w-full">
       <Form {...form}>
         <form action={formAction} className="flex flex-col justify-center items-center gap-2 w-full">
-          <FormField
+        <FormField
             control={form.control}
             name="profilePhoto"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{/* <Image src={user.profilePhoto} alt="profile photo" /> */}</FormLabel>
+                <FormLabel>profilePhoto</FormLabel>
                 <FormControl>
                   <Input placeholder="profilePhoto" {...field} />
                 </FormControl>

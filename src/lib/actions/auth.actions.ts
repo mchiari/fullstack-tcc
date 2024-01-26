@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { authentication, random } from "../utils";
+import { createNewToken, getJwtSecretKey, mixSalt, random } from "../utils";
 import { loginFormSchema, registerFormSchema } from "../schemas/auth";
 import { connectToDB } from "../mongoose";
 import { UserModel } from "../models/user.model";
@@ -25,14 +25,16 @@ export const login = async (state: any, formData: FormData) => {
       return { error: "Wrong email" };
     }
 
-    const expectedHash = authentication(user.authentication!.salt, String(password));
+    const expectedHash = mixSalt(user.authentication!.salt, String(password));
 
     if (user.authentication!.password != expectedHash) {
       return { error: "Wrong password" };
     }
 
-    const salt = random();
-    user.authentication!.sessionToken = authentication(salt, user._id!.toString());
+    const token = await createNewToken()
+
+    // user.authentication!.sessionToken = authentication(salt, user._id!.toString());
+    user.authentication!.sessionToken = token;
     // @ts-ignore
     await user.save();
 
@@ -63,8 +65,9 @@ export const register = async (state: any, formData: FormData) => {
     lastName: formData.get("lastName"),
     firstName: formData.get("firstName"),
     cpf: formData.get("cpf"),
-    profilePhoto: formData.get("profilePhoto"),
-    role: formData.get("role") ?? "tutor",
+    // profilePhoto: formData.get("profilePhoto"),
+    profilePhoto: "testPhoto",
+    role: formData.get("role") ?? "admin",
   });
 
   if (result.success) {
@@ -80,13 +83,13 @@ export const register = async (state: any, formData: FormData) => {
       role: role,
       authentication: {
         salt,
-        password: authentication(salt, password),
+        password: mixSalt(salt, password),
       },
     })
       .save()
       .then((user: any) => user.toObject());
 
-    return { data: user._id };
+    return { data: true };
   }
 
   if (result.error) {

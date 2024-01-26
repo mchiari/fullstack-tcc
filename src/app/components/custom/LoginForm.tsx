@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { login } from "@/lib/actions/auth.actions";
 import { loginFormSchema } from "@/lib/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useFormState } from "react-dom";
@@ -24,8 +23,6 @@ const LoginForm = () => {
       password: "",
     },
   });
-
-  console.log(JSON.stringify(form.getValues()));
 
   const [state, formAction] = useFormState(login, null);
 
