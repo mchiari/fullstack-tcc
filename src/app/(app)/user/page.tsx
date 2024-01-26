@@ -1,7 +1,8 @@
-import AccountProfile from "@/app/components/custom/AccountProfile";
+import AccountProfile from "@/app/(app)/user/components/AccountProfile";
 import { getUserBySessionToken } from "@/lib/actions/user.actions";
 import { cookies } from "next/headers";
 import React, { Suspense } from "react";
+import UserDashboard from "./components/UserDashboard";
 
 const UserPage = async () => {
   const token = cookies().get("sessionToken");
@@ -17,7 +18,7 @@ const UserPage = async () => {
 
       <section className="flex justify-center items-center">
         <Suspense fallback={"loading..."}>
-          <AccountProfile user={user} />
+          <UserDashboard user={user} />
         </Suspense>
       </section>
     </div>

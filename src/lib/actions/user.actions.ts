@@ -8,7 +8,7 @@ import { userFormSchema } from "../schemas/user";
 export const updateUser = async (state: any, formData: FormData) => {
   connectToDB();
 
-  console.log(formData);
+  // console.log(formData);
 
   const form = userFormSchema.safeParse({
     _id: formData.get("_id"),
