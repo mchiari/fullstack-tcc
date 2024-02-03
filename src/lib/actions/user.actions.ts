@@ -22,7 +22,7 @@ export const updateUser = async (state: any, formData: FormData) => {
   });
 
   if (form.success) {
-    let { email, firstName, lastName, cpf, profilePhoto,  role, _id } = form.data;
+    let { email, firstName, lastName, cpf, profilePhoto, role, _id } = form.data;
 
     await UserModel.findOneAndUpdate(
       { _id: _id },
@@ -51,11 +51,13 @@ export const updateUser = async (state: any, formData: FormData) => {
   }
 };
 
-export const getUserByEmailWithAuth = async (email: string): mongoose.Query<UserDocument, any> => {
+export const getUserByEmailWithAuth = async (email: string): Promise<UserDocument | null> => {
   connectToDB();
 
   try {
-    const user = await UserModel.findOne({ email: email }).select("+authentication.salt +authentication.password");
+    const user = await UserModel.findOne({ email: email })
+      .select("+authentication.salt +authentication.password")
+      // .lean() as UserDocument
 
     return user;
   } catch (error: any) {
@@ -63,13 +65,13 @@ export const getUserByEmailWithAuth = async (email: string): mongoose.Query<User
   }
 };
 
-export const getUserBySessionToken = async (sessionToken: string): mongoose.Query<UserDocument, any> => {
+export const getUserBySessionToken = async (sessionToken: string): Promise<UserDocument | null> => {
   connectToDB();
 
   try {
-    const user = await UserModel.findOne({ "authentication.sessionToken": sessionToken });
+    const user = (await UserModel.findOne({ "authentication.sessionToken": String(sessionToken) }).lean()) as UserDocument;
 
-    return user ? user.toJSON() : null;
+    return user;
   } catch (error: any) {
     throw new Error(`Failed to find user by email: ${error.message}`);
   }

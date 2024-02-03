@@ -28,7 +28,7 @@ const RegisterForm = () => {
     },
   });
 
-  console.log(JSON.stringify(form.getValues()));
+  // console.log(JSON.stringify(form.getValues()));
 
   const [state, formAction] = useFormState(register, null);
 
@@ -46,7 +46,7 @@ const RegisterForm = () => {
             control={form.control}
             name="profilePhoto"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>profilePhoto</FormLabel>
                 <FormControl>
                   <Input placeholder="profilePhoto" {...field} />
@@ -59,7 +59,7 @@ const RegisterForm = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>email</FormLabel>
                 <FormControl>
                   <Input placeholder="email" {...field} />
@@ -72,7 +72,7 @@ const RegisterForm = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>password</FormLabel>
                 <FormControl>
                   <Input placeholder="password" {...field} />
@@ -85,7 +85,7 @@ const RegisterForm = () => {
             control={form.control}
             name="firstName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>firstName</FormLabel>
                 <FormControl>
                   <Input placeholder="firstName" {...field} />
@@ -98,7 +98,7 @@ const RegisterForm = () => {
             control={form.control}
             name="lastName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>lastName</FormLabel>
                 <FormControl>
                   <Input placeholder="lastName" {...field} />
@@ -111,7 +111,7 @@ const RegisterForm = () => {
             control={form.control}
             name="cpf"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>cpf</FormLabel>
                 <FormControl>
                   <Input placeholder="cpf" {...field} />

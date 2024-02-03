@@ -32,6 +32,7 @@ export const login = async (state: any, formData: FormData) => {
     }
 
     const token = await createNewToken()
+    // console.log(token);
 
     // user.authentication!.sessionToken = authentication(salt, user._id!.toString());
     user.authentication!.sessionToken = token;

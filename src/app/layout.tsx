@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/custom/Navbar";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className + " flex flex-col justify-start items-center min-h-screen gap-4"}>
+      <body
+        className={
+          inter.className + cn(" flex flex-col justify-start items-center w-full min-h-screen gap-4", "bg-zinc-400")
+        }
+      >
         <Navbar />
-          {children}
+        <div className="flex flex-col justify-center items-start h-full w-full p-4">{children}</div>
       </body>
     </html>
   );

@@ -2,12 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { register } from "@/lib/actions/auth.actions";
-import { createStudent, updateStudent } from "@/lib/actions/student.actions";
-import { registerFormSchema } from "@/lib/schemas/auth";
+import { createStudent } from "@/lib/actions/student.actions";
 import { registerStudentFormSchema } from "@/lib/schemas/student";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,29 +27,27 @@ const RegisterStudentForm = ({ tutorId }: { tutorId?: string }) => {
       profilePhoto: "",
       firstName: "",
       lastName: "",
+      healthInfo: "",
       tutor: tutorId,
       birthday: "",
       dob: new Date(),
     },
   });
 
-  //   console.log(form.getValues())
-
   const [state, formAction] = useFormState(createStudent, null);
-  //   console.log(state)
 
-//   useEffect(() => {
-//     if (state?.data === true) {
-//       router.push("/feed");
-//     }
-//   }, [state]);
+  //   useEffect(() => {
+  //     if (state?.data === true) {
+  //       router.push("/feed");
+  //     }
+  //   }, [state]);
 
   let dob = form.getValues("dob");
   useEffect(() => {
     if (dob) {
       form.setValue("birthday", dob.toISOString());
     }
-    console.log(dob.toISOString());
+    // console.log(dob.toISOString());
   }, [dob]);
 
   return (
@@ -63,7 +59,7 @@ const RegisterStudentForm = ({ tutorId }: { tutorId?: string }) => {
               control={form.control}
               name="profilePhoto"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>profilePhoto</FormLabel>
                   <FormControl>
                     <Input placeholder="profilePhoto" {...field} />
@@ -72,12 +68,11 @@ const RegisterStudentForm = ({ tutorId }: { tutorId?: string }) => {
                 </FormItem>
               )}
             />
-            {JSON.stringify(state)}
             <FormField
               control={form.control}
               name="healthInfo"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>healthInfo</FormLabel>
                   <FormControl>
                     <Input type="textarea" placeholder="healthInfo" {...field} />
@@ -90,7 +85,7 @@ const RegisterStudentForm = ({ tutorId }: { tutorId?: string }) => {
               control={form.control}
               name="firstName"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>firstName</FormLabel>
                   <FormControl>
                     <Input placeholder="firstName" {...field} />
@@ -103,7 +98,7 @@ const RegisterStudentForm = ({ tutorId }: { tutorId?: string }) => {
               control={form.control}
               name="lastName"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>lastName</FormLabel>
                   <FormControl>
                     <Input placeholder="lastName" {...field} />
@@ -117,7 +112,7 @@ const RegisterStudentForm = ({ tutorId }: { tutorId?: string }) => {
               control={form.control}
               name="dob"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className="w-full flex flex-col">
                   <FormLabel>Date of birth</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -125,7 +120,7 @@ const RegisterStudentForm = ({ tutorId }: { tutorId?: string }) => {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
+                            "w-full pl-3 text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -179,8 +174,10 @@ const RegisterStudentForm = ({ tutorId }: { tutorId?: string }) => {
             />
 
             <Button disabled={false} type="submit" className="mt-2 w-full">
-              Atualizar
+              Registrar
             </Button>
+          {JSON.stringify(state)}
+
           </form>
         </Form>
       </div>

@@ -23,7 +23,7 @@ const AccountProfile = (user: { user: UserDocument }) => {
   const form = useForm<Omit<z.infer<typeof userFormSchema> & { _id: string }, "password">>({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
-      _id: userData._id,
+      _id: userData._id?.toString(),
       profilePhoto: userData.profilePhoto,
       email: userData.email,
       firstName: userData.firstName,
@@ -44,7 +44,7 @@ const AccountProfile = (user: { user: UserDocument }) => {
             control={form.control}
             name="profilePhoto"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>profilePhoto</FormLabel>
                 <FormControl>
                   <Input placeholder="profilePhoto" {...field} />
@@ -57,7 +57,7 @@ const AccountProfile = (user: { user: UserDocument }) => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>email</FormLabel>
                 <FormControl>
                   <Input placeholder="email" {...field} />
@@ -70,7 +70,7 @@ const AccountProfile = (user: { user: UserDocument }) => {
             control={form.control}
             name="firstName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>firstName</FormLabel>
                 <FormControl>
                   <Input placeholder="firstName" {...field} />
@@ -83,7 +83,7 @@ const AccountProfile = (user: { user: UserDocument }) => {
             control={form.control}
             name="lastName"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>lastName</FormLabel>
                 <FormControl>
                   <Input placeholder="lastName" {...field} />
@@ -96,7 +96,7 @@ const AccountProfile = (user: { user: UserDocument }) => {
             control={form.control}
             name="cpf"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>cpf</FormLabel>
                 <FormControl>
                   <Input placeholder="cpf" {...field} />
@@ -110,7 +110,7 @@ const AccountProfile = (user: { user: UserDocument }) => {
             control={form.control}
             name="role"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input type="hidden" placeholder="role" {...field} />
                 </FormControl>
@@ -123,7 +123,7 @@ const AccountProfile = (user: { user: UserDocument }) => {
             control={form.control}
             name="_id"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input type="hidden" placeholder="_id" {...field} />
                 </FormControl>

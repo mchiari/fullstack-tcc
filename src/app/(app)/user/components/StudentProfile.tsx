@@ -25,146 +25,168 @@ const StudentProfile = (student: { student: StudentDocument }) => {
 
   // console.log(studentData);
 
-  const form = useForm<z.infer<typeof studentFormSchema> & { _id: string }>({
+  const form = useForm<z.infer<typeof studentFormSchema> & { dob: Date }>({
     resolver: zodResolver(studentFormSchema),
     defaultValues: {
-      _id: studentData._id,
+      _id: studentData._id!.toString(),
       profilePhoto: studentData.profilePhoto,
       firstName: studentData.firstName,
       lastName: studentData.lastName,
+      healthInfo: studentData.healthInfo,
       tutor: studentData.tutor,
       birthday: studentData.birthday,
+      dob: new Date(studentData.birthday),
     },
   });
 
   const [state, formAction] = useFormState(updateStudent, null);
 
-  const [date, setDate] = useState();
-
   return (
-    <div className="flex justify-center items-center w-full">
-      <Form {...form}>
-        <form action={formAction} className="flex flex-col justify-center items-center gap-2 w-full">
-          <FormField
-            control={form.control}
-            name="profilePhoto"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>profilePhoto</FormLabel>
-                <FormControl>
-                  <Input placeholder="profilePhoto" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="healthInfo"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>healthInfo</FormLabel>
-                <FormControl>
-                  <Input type="textarea" placeholder="healthInfo" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>firstName</FormLabel>
-                <FormControl>
-                  <Input placeholder="firstName" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>lastName</FormLabel>
-                <FormControl>
-                  <Input placeholder="lastName" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    studentData && (
+      <div className="flex justify-center items-center w-full">
+        <Form {...form}>
+          <form action={formAction} className="flex flex-col justify-center items-center gap-2 w-full">
+            <FormField
+              control={form.control}
+              name="profilePhoto"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>profilePhoto</FormLabel>
+                  <FormControl>
+                    <Input placeholder="profilePhoto" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="healthInfo"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>healthInfo</FormLabel>
+                  <FormControl>
+                    <Input type="textarea" placeholder="healthInfo" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>firstName</FormLabel>
+                  <FormControl>
+                    <Input placeholder="firstName" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>lastName</FormLabel>
+                  <FormControl>
+                    <Input placeholder="lastName" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* <FormField
-            control={form.control}
-            name="birthday"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Date of birth</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
-                      >
-                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormDescription>Your date of birth is used to calculate your age.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
+            <FormField
+              control={form.control}
+              name="dob"
+              render={({ field }) => (
+                <FormItem className="flex flex-col w-full">
+                  <FormLabel>Date of birth</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild className="w-full">
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          type="button"
+                          // onClick={(e)=> {e.preventDefault(e)}}
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {/* <FormDescription>Your date of birth is used to calculate your age.</FormDescription> */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="tutor"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>tutor</FormLabel>
-                <FormControl>
-                  <Input type="hidden" placeholder="Tutor" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="birthday"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  {/* <FormLabel>tutor</FormLabel> */}
+                  <FormControl>
+                    <Input type="hidden" placeholder="Birthday" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input type="hidden" placeholder="_id" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="tutor"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>tutor</FormLabel>
+                  <FormControl>
+                    <Input type="hidden" placeholder="Tutor" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <Button disabled={false} type="submit" className="mt-2 w-full">
-            Atualizar
-          </Button>
-        </form>
-      </Form>
-    </div>
+            <FormField
+              control={form.control}
+              name="_id"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input type="hidden" placeholder="_id" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button disabled={false} type="submit" className="mt-2 w-full">
+              Atualizar
+            </Button>
+            {JSON.stringify(state)}
+          </form>
+        </Form>
+      </div>
+    )
   );
 };
 

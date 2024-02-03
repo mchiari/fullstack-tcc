@@ -1,6 +1,6 @@
 "use server";
 
-import { StudentModel } from "../models/student.model";
+import { StudentDocument, StudentModel } from "../models/student.model";
 import { connectToDB } from "../mongoose";
 import { registerStudentFormSchema, studentFormSchema } from "../schemas/student";
 
@@ -8,7 +8,7 @@ import { registerStudentFormSchema, studentFormSchema } from "../schemas/student
 export const createStudent = async (state: any, formData: FormData) => {
     connectToDB();
 
-    console.log(formData);
+    // console.log(formData);
   
     const form = registerStudentFormSchema.safeParse({
       firstName: formData.get("firstName"),
@@ -33,7 +33,7 @@ export const createStudent = async (state: any, formData: FormData) => {
         .save()
         .then((user: any) => user.toObject());
   
-      return { data: user };
+      return { data: true };
     }
   
     if (form.error) {
@@ -44,7 +44,7 @@ export const createStudent = async (state: any, formData: FormData) => {
 export const updateStudent = async (state: any, formData: FormData) => {
   connectToDB();
 
-  console.log(formData);
+  // console.log(formData);
 
   const form = studentFormSchema.safeParse({
     _id: formData.get("_id"),
@@ -86,13 +86,13 @@ export const updateStudent = async (state: any, formData: FormData) => {
   }
 };
 
-export const getStudentsByTutorId = async (tutorId: string) => {
+export const getStudentsByTutorId = async (tutorId: string): Promise<StudentDocument[] | null> => {
   connectToDB();
 
   try {
-    const students = await StudentModel.find({ tutor: tutorId }).populate("tutor")
+    const students = await StudentModel.find({ tutor: tutorId }).lean() as StudentDocument[]
 
-    return students;
+    return students
   } catch (error: any) {
     throw new Error(`Failed to find students by tutor ID: ${error.message}`);
   }
