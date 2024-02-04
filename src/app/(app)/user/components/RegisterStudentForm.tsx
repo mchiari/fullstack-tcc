@@ -6,7 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { createStudent } from "@/lib/actions/student.actions";
-import { registerStudentFormSchema } from "@/lib/schemas/student";
+import { studentFormSchema } from "@/lib/schemas/student";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -21,8 +21,8 @@ const RegisterStudentForm = ({ tutorId }: { tutorId?: string }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof registerStudentFormSchema> & { dob: Date }>({
-    resolver: zodResolver(registerStudentFormSchema),
+  const form = useForm<z.infer<typeof studentFormSchema> & { dob: Date }>({
+    resolver: zodResolver(studentFormSchema),
     defaultValues: {
       profilePhoto: "",
       firstName: "",

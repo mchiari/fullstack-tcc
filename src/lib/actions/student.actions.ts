@@ -2,7 +2,7 @@
 
 import { StudentDocument, StudentModel } from "../models/student.model";
 import { connectToDB } from "../mongoose";
-import { registerStudentFormSchema, studentFormSchema } from "../schemas/student";
+import {  studentFormSchema } from "../schemas/student";
 
 
 export const createStudent = async (state: any, formData: FormData) => {
@@ -10,7 +10,7 @@ export const createStudent = async (state: any, formData: FormData) => {
 
     // console.log(formData);
   
-    const form = registerStudentFormSchema.safeParse({
+    const form = studentFormSchema.safeParse({
       firstName: formData.get("firstName"),
       lastName: formData.get("lastName"),
       healthInfo: formData.get("healthInfo"),
@@ -97,3 +97,16 @@ export const getStudentsByTutorId = async (tutorId: string): Promise<StudentDocu
     throw new Error(`Failed to find students by tutor ID: ${error.message}`);
   }
 };
+
+
+export const getAllStudents = async () => {
+  connectToDB()
+
+  try {
+    const students = await StudentModel.find({}).lean() as StudentDocument[]
+    
+    return students
+  } catch (error: any) {
+    throw new Error(`Failed to get students without class: ${error.message}`);
+  }
+}
