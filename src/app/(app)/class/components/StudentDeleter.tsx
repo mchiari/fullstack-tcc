@@ -1,3 +1,5 @@
+"use client"
+
 import { TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {

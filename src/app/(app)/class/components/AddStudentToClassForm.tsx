@@ -102,11 +102,7 @@ export const AddStudentToClassForm: React.FC<AddStudentToClassFormProps> = async
 
               <DrawerFooter>
                 <Button type="submit">Submit</Button>
-                <DrawerClose asChild>
-                  <Button variant="outline" type="button">
-                    Cancelar
-                  </Button>
-                </DrawerClose>
+                <DrawerClose>Cancelar</DrawerClose>
                 {JSON.stringify(state)}
               </DrawerFooter>
             </form>

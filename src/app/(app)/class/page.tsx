@@ -15,7 +15,7 @@ const ClassPage = async () => {
   const user = await getUserBySessionToken(token!);
   const classes = await getClasses();
   const allStudents = await getAllStudents();
-
+  
   return (
     <div className="flex flex-col justify-center items-center w-full p-4 gap-4">
       <div className="flex flex-col justify-center items-start w-full gap-2">

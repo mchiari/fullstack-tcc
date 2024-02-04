@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ClassInterface } from "@/lib/models/class.model";
@@ -38,7 +37,7 @@ export const ClassTable: React.FC<ClassTableProps> = ({ data }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.students.map((student, index) => {
+          {data && data.students.map((student, index) => {
             let age = getAgeFromBirthday(student.birthday);
             return (
               <TableRow key={student.firstName+index}>

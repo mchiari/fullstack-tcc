@@ -53,10 +53,20 @@ export const addStudentToClass = async (state: any, formData: FormData) => {
   if (form.success) {
     let { classId, student } = form.data;
 
-    const existingClass = await ClassModel.findByIdAndUpdate(classId, { $push: { students: student } }, { new: true });
-    //    as ClassDocument;
+    const classFound = await ClassModel.findById(classId);
 
-    return { data: existingClass.students };
+    if (!classFound) {
+      return { error: "Class not found" };
+    }
+
+    const studentIndex = classFound.students.indexOf(student);
+
+    if (studentIndex === -1) {
+      classFound.students.push(student);
+      const updatedClass = await classFound.save();
+
+      return { data: updatedClass.students };
+    } else return { error: "Student already signed up in the class" };
   }
 
   if (form.error) {
