@@ -108,3 +108,16 @@ export const removeStudentFromClass = async (state: any, formData: FormData) => 
     return { error: form.error.format() };
   }
 };
+
+
+// export const getAllClasses = async () => {
+//   connectToDB()
+
+//   try {
+//     const allClasses = await ClassModel.find({}).populate("students").lean() as ClassDocument[]
+    
+//     return allClasses
+//   } catch (error: any) {
+//     throw new Error(`Failed to get classes: ${error.message}`);
+//   }
+// }

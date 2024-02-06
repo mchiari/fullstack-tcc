@@ -9,11 +9,10 @@ import { ClassInterface } from "@/lib/models/class.model";
 import { StudentInterface } from "@/lib/models/student.model";
 import { addStudentToClassFormSchema } from "@/lib/schemas/class";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useFormState } from "react-dom";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { cn } from "@/lib/utils";
 
 export type AddStudentToClassFormProps = {
   data: ClassInterface;
