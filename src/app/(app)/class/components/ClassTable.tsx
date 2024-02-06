@@ -1,12 +1,17 @@
+"use client"
 import React from "react";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ClassInterface } from "@/lib/models/class.model";
 import StudentDeleter from "./StudentDeleter";
+import { StudentInterface } from "@/lib/models/student.model";
+import { UserInterface } from "@/lib/models/user.model";
 
 export type ClassTableProps = {
   data: ClassInterface;
 };
 export const ClassTable: React.FC<ClassTableProps> = ({ data }) => {
+
+  console.log(data);
   const getAgeFromBirthday = (dob: string) => {
     const birthDate = new Date(dob);
     const currentDate = new Date();
@@ -37,15 +42,16 @@ export const ClassTable: React.FC<ClassTableProps> = ({ data }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data && data.students.map((student, index) => {
+          {data && data.students.map((student: StudentInterface, index) => {
             let age = getAgeFromBirthday(student.birthday);
+            let tutor = student.tutor as UserInterface
             return (
               <TableRow key={student.firstName+index}>
                 <TableCell>{student.profilePhoto}</TableCell>
                 <TableCell>{student.firstName + " " + student.lastName}</TableCell>
                 <TableCell>{new Date(student.birthday).toISOString().split("T")[0]}</TableCell>
                 <TableCell>{age}</TableCell>
-                <TableCell>{student.tutor}</TableCell>
+                <TableCell>{tutor.firstName + " " + tutor.lastName}</TableCell>
                 <TableCell>
                   <StudentDeleter studentId={student._id!} classId={data._id!} />
                 </TableCell>

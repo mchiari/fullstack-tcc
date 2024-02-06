@@ -75,7 +75,7 @@ const StudentDeleter = ({ studentId, classId }: { studentId: string; classId: st
               />
 
               <AlertDialogAction asChild>
-                <Button type="submit">Desvincular</Button>
+                <Button>Desvincular</Button>
               </AlertDialogAction>
             </form>
           </Form>

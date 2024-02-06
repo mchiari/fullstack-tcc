@@ -103,7 +103,7 @@ export const getAllStudents = async () => {
   connectToDB()
 
   try {
-    const students = await StudentModel.find({}).lean() as StudentDocument[]
+    const students = await StudentModel.find({}).populate("tutor").lean() as StudentDocument[]
     
     return students
   } catch (error: any) {

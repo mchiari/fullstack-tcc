@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
+import { UserInterface } from "./user.model";
 
 export interface StudentInterface {
   _id?: string;
   profilePhoto: string;
   firstName: string;
   lastName: string;
-  tutor: string;
+  tutor: string | UserInterface
   birthday: string;
   healthInfo?: string;
 }

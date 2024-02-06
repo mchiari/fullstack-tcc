@@ -34,7 +34,7 @@ export const getClasses = async () => {
   connectToDB();
 
   try {
-    const classes = (await ClassModel.find({}).populate("students").lean()) as ClassDocument[];
+    const classes = (await ClassModel.find({}).populate({path: "students", populate: {path: "tutor"}}).lean()) as ClassDocument[];
 
     return classes;
   } catch (error: any) {
@@ -59,7 +59,7 @@ export const addStudentToClass = async (state: any, formData: FormData) => {
       return { error: "Class not found" };
     }
 
-    const studentIndex = classFound.students.indexOf(student);
+    const studentIndex = await classFound.students.indexOf(student);
 
     if (studentIndex === -1) {
       classFound.students.push(student);
@@ -101,7 +101,7 @@ export const removeStudentFromClass = async (state: any, formData: FormData) => 
 
     const updatedClass = await classFound.save();
 
-    return { data: updatedClass };
+    return { data: true };
   }
 
   if (form.error) {
