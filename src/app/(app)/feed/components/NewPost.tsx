@@ -22,7 +22,7 @@ export type NewPostProps = {
 };
 
 export const NewPost: React.FC<NewPostProps> = ({ classes, user }) => {
-  console.log(classes);
+  // console.log(classes);
 
   const form = useForm<z.infer<typeof newPostFormSchema & { addMention: string }>>({
     resolver: zodResolver(newPostFormSchema),
@@ -57,7 +57,7 @@ export const NewPost: React.FC<NewPostProps> = ({ classes, user }) => {
     return arr;
   };
 
-  console.log(form.getValues());
+  // console.log(form.getValues());
 
   const [state, formAction] = useFormState(createPost, null);
 
@@ -130,6 +130,7 @@ export const NewPost: React.FC<NewPostProps> = ({ classes, user }) => {
                         cacheOptions
                         defaultOptions
                         menuPlacement="top"
+                        // @ts-ignore
                         loadOptions={searchOptions}
                       />
                     </FormControl>

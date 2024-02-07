@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { UserInterface } from "./user.model";
+import { ClassInterface } from "./class.model";
 
 const PostSchema = new mongoose.Schema(
   {
@@ -19,8 +21,8 @@ export interface PostInterface {
   title: string;
   content: string;
   type: string;
-  author: string;
-  mentions: string[];
+  author: string | UserInterface
+  mentions: string[] | ClassInterface[];
   _id?: string;
 }
 

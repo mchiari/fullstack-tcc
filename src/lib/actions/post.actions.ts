@@ -21,16 +21,16 @@ export const createPost = async (state: any, formData: FormData) => {
   if (form.success) {
     console.log(form.data);
     let { title, content, type, mentions, author } = form.data;
-    console.log(mentions);
+    // console.log(mentions);
     //TODO: add more than one mention
 
-    // const newPost = await new PostModel({
-    //   title: title,
-    //   content: content,
-    //   type: type,
-    //   mentions: mentions,
-    //   author: author,
-    // }).save();
+    const newPost = await new PostModel({
+      title: title,
+      content: content,
+      type: type,
+      mentions: mentions,
+      author: author,
+    }).save();
 
     return { data: true };
   }
@@ -38,4 +38,15 @@ export const createPost = async (state: any, formData: FormData) => {
   if (form.error) {
     return { error: form.error.format() };
   }
+};
+
+export const getPosts = async () => {
+  connectToDB();
+
+  const posts = await PostModel.find({}).populate("author mentions").lean();
+
+  if (!posts) {
+    return { error: "No posts found!" };
+  }
+  return posts;
 };
